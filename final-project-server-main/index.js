@@ -1,6 +1,8 @@
 const express = require('express')
-const app = express()
 const cors = require('cors')
+const { v4: uuidv4 } = require('uuid') // UUID 라이브러리 추가
+
+const app = express()
 const PORT = 3000
 
 app.use(cors())
@@ -18,7 +20,6 @@ let books = [
   { id: '9', title: 'Meditations', author: 'Marcus Aurelius', genre: 'Philosophy', publishedDate: '180-01-01', rating: 4, available: true },
   { id: '10', title: 'Pride and Prejudice', author: 'Jane Austen', genre: 'Romance', publishedDate: '1813-01-28', rating: 5, available: true }
 ]
-
 
 app.get('/books', (req, res) => {
   const { genre, search } = req.query
@@ -49,7 +50,7 @@ app.get('/books/:id', (req, res) => {
 
 app.post('/books', (req, res) => {
   const { title, author, genre, publishedDate, rating, available } = req.body
-  const id = String(books.length + 1)
+  const id = uuidv4() // 고유한 UUID 생성
   const newBook = { id, title, author, genre, publishedDate, rating, available }
   books.push(newBook)
   setTimeout(() => res.status(201).json(newBook), 500)
